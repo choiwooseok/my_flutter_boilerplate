@@ -4,8 +4,8 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../../domain/entity/post.dart';
 import '../../../util/constant.dart';
+import '../../model/post_model.dart';
 
 class PostsDataSource {
   static final PostsDataSource instance = PostsDataSource._internal();
@@ -40,26 +40,28 @@ class PostsDataSource {
     }
   }
 
-  Future<List<Post>> getPosts() async {
+  Future<List<PostModel>> getPosts() async {
     final db = await database;
     var res = await db.query(kTableName);
     if (res.isEmpty) {
       return [];
     }
-    return res.map((e) => Post.fromJson(e)).toList();
+    return res.map((e) => PostModel.fromMap(e)).toList();
   }
 
-  Future<int> addPost(Post post) async {
+  Future<List<PostModel>> addPost(PostModel post) async {
     final db = await database;
-    return db.insert(kTableName, post.toMap());
+    await db.insert(kTableName, post.toMap());
+    return getPosts();
   }
 
-  Future<int> deletePost(int id) async {
+  Future<List<PostModel>> deletePost(int id) async {
     final db = await database;
-    return db.delete(kTableName, where: 'id = ?', whereArgs: [id]);
+    await db.delete(kTableName, where: 'id = ?', whereArgs: [id]);
+    return getPosts();
   }
 
-  Future<Post?> getPost(int id) async {
+  Future<PostModel?> getPost(int id) async {
     final db = await database;
     var res = await db.query(kTableName, where: 'id = ?', whereArgs: [id]);
 
@@ -67,12 +69,13 @@ class PostsDataSource {
       return null;
     }
 
-    return Post.fromJson(res.first);
+    return PostModel.fromMap(res.first);
   }
 
-  Future<int> updatePost(Post post) async {
+  Future<List<PostModel>> updatePost(PostModel post) async {
     final db = await database;
-    return db.update(kTableName, post.toMap(),
+    await db.update(kTableName, post.toMap(),
         where: 'id = ?', whereArgs: [post.id]);
+    return getPosts();
   }
 }

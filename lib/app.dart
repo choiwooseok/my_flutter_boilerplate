@@ -54,7 +54,7 @@ class _AppRootState extends State<AppRoot> {
     //       colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
     //       useMaterial3: true,
     //     ),
-    //     home: const ListPage(title: 'Boilerplate Page'),
+    //     home: const PostsPage(title: 'Boilerplate Page'),
     //     builder: (context, child) {
     //       // disable text scaling
     //       final MediaQueryData data = MediaQuery.of(context);

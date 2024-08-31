@@ -1,4 +1,4 @@
-import '../entity/post.dart';
+import '../entity/post_entity.dart';
 import '../repository/posts_repository.dart';
 
 class AddPostUseCase {
@@ -6,7 +6,7 @@ class AddPostUseCase {
 
   AddPostUseCase(this._postsRepository);
 
-  Future<int> addPost(Post post) async {
+  Future<List<PostEntity>> addPost(PostEntity post) async {
     return await _postsRepository.addPost(post);
   }
 }

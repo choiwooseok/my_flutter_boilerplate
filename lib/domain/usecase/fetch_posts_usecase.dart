@@ -1,4 +1,4 @@
-import '../entity/post.dart';
+import '../entity/post_entity.dart';
 import '../repository/posts_repository.dart';
 
 class FetchPostsUseCase {
@@ -6,7 +6,7 @@ class FetchPostsUseCase {
 
   FetchPostsUseCase(this._postsRepository);
 
-  Future<List<Post>> fetchPosts() async {
+  Future<List<PostEntity>> fetchPosts() async {
     return await _postsRepository.fetchPosts();
   }
 }

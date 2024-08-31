@@ -1,9 +1,9 @@
-import '../entity/post.dart';
+import '../entity/post_entity.dart';
 
 abstract class PostsRepository {
-  Future<int> addPost(Post post);
-  Future<List<Post>> fetchPosts();
-  Future<Post?> fetchPostById(int id);
-  Future<int> updatePost(Post post);
-  Future<int> deletePost(int id);
+  Future<List<PostEntity>> addPost(PostEntity post);
+  Future<List<PostEntity>> fetchPosts();
+  Future<PostEntity?> fetchPostById(int id);
+  Future<List<PostEntity>> updatePost(PostEntity post);
+  Future<List<PostEntity>> deletePost(int id);
 }

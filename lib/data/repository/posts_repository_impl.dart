@@ -1,8 +1,9 @@
-import 'package:my_boilerplate/data/datasource/remote/rest_apis.dart';
-
-import '../../domain/entity/post.dart';
+import '../../domain/entity/post_entity.dart';
 import '../../domain/repository/posts_repository.dart';
 import '../datasource/local/post_datasource.dart';
+import '../datasource/remote/rest_apis.dart';
+import '../mapping/post_mapping.dart';
+import '../model/post_model.dart';
 
 class PostsRepositoryImpl implements PostsRepository {
   final PostsDataSource postsDataSource;
@@ -12,7 +13,7 @@ class PostsRepositoryImpl implements PostsRepository {
   PostsRepositoryImpl({required this.postsDataSource});
 
   @override
-  Future<List<Post>> fetchPosts() async {
+  Future<List<PostEntity>> fetchPosts() async {
     // remote Api call
     // await restApis.getPosts();
 
@@ -20,26 +21,36 @@ class PostsRepositoryImpl implements PostsRepository {
 
     // then return from local database
 
-    return await postsDataSource.getPosts();
+    final List<PostModel> posts = await postsDataSource.getPosts();
+    return posts.map((e) => PostMapping.toEntity(e)).toList();
   }
 
   @override
-  Future<int> addPost(Post post) async {
-    return await postsDataSource.addPost(post);
+  Future<List<PostEntity>> addPost(PostEntity post) async {
+    final postModel = PostMapping.toModel(post);
+    final List<PostModel> posts = await postsDataSource.addPost(postModel);
+    return posts.map((e) => PostMapping.toEntity(e)).toList();
   }
 
   @override
-  Future<int> deletePost(int id) async {
-    return await postsDataSource.deletePost(id);
+  Future<List<PostEntity>> deletePost(int id) async {
+    final List<PostModel> posts = await postsDataSource.deletePost(id);
+    return posts.map((e) => PostMapping.toEntity(e)).toList();
   }
 
   @override
-  Future<Post?> fetchPostById(int id) async {
-    return await postsDataSource.getPost(id);
+  Future<PostEntity?> fetchPostById(int id) async {
+    final postModel = await postsDataSource.getPost(id);
+    if (postModel == null) {
+      return null;
+    }
+    return PostMapping.toEntity(postModel);
   }
 
   @override
-  Future<int> updatePost(Post post) async {
-    return await postsDataSource.updatePost(post);
+  Future<List<PostEntity>> updatePost(PostEntity post) async {
+    final postModel = PostMapping.toModel(post);
+    final List<PostModel> posts = await postsDataSource.updatePost(postModel);
+    return posts.map((e) => PostMapping.toEntity(e)).toList();
   }
 }
