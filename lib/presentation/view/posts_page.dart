@@ -14,15 +14,6 @@ class PostsPage extends StatefulWidget {
 
 class _PostsPageState extends State<PostsPage> {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final PostsPageVM vm = context.read<PostsPageVM>();
-      await vm.fetchPosts();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final PostsPageVM vm = context.watch<PostsPageVM>();
 
