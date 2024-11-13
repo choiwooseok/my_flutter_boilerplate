@@ -11,32 +11,28 @@ class DIContainer {
   factory DIContainer() => _instance;
   DIContainer._internal();
 
-  final _dependencies = <String, dynamic>{};
+  final _dependencies = <Type, dynamic>{};
 
   void alloc() {
     // Data Layer
-    _dependencies['PostsDataSource'] = PostsDataSource();
-    _dependencies['PostsRepository'] =
-        PostsRepositoryImpl(postsDataSource: _dependencies['PostsDataSource']);
+    register<PostsDataSource>(PostsDataSource());
+    register<PostsRepositoryImpl>(
+        PostsRepositoryImpl(postsDataSource: get<PostsDataSource>()));
 
     // Domain Layer
-    _dependencies['AddPostUseCase'] =
-        AddPostUseCase(_dependencies['PostsRepository']);
-    _dependencies['DeletePostUseCase'] =
-        DeletePostUseCase(_dependencies['PostsRepository']);
-    _dependencies['FetchPostByIdUseCase'] =
-        FetchPostByIdUseCase(_dependencies['PostsRepository']);
-    _dependencies['FetchPostsUseCase'] =
-        FetchPostsUseCase(_dependencies['PostsRepository']);
-    _dependencies['UpdatePostUseCase'] =
-        UpdatePostUseCase(_dependencies['PostsRepository']);
+    register<AddPostUseCase>(AddPostUseCase(get<PostsRepositoryImpl>()));
+    register<DeletePostUseCase>(DeletePostUseCase(get<PostsRepositoryImpl>()));
+    register<FetchPostByIdUseCase>(
+        FetchPostByIdUseCase(get<PostsRepositoryImpl>()));
+    register<FetchPostsUseCase>(FetchPostsUseCase(get<PostsRepositoryImpl>()));
+    register<UpdatePostUseCase>(UpdatePostUseCase(get<PostsRepositoryImpl>()));
 
     // Presentation Layer
   }
 
-  T get<T>(String key) {
-    return _dependencies[key];
-  }
+  T get<T>() => _dependencies[T] as T;
+
+  void register<T>(T instance) => _dependencies[T] = instance;
 
   void dispose() {
     _dependencies.clear();

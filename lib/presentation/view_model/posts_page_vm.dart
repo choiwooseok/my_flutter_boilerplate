@@ -11,27 +11,22 @@ class PostsPageVM with ChangeNotifier {
   List<PostEntity> get posts => _posts;
 
   Future<void> fetchPosts() async {
-    _posts = await DIContainer()
-        .get<FetchPostsUseCase>("FetchPostsUseCase")
-        .fetchPosts();
+    _posts = await DIContainer().get<FetchPostsUseCase>().fetchPosts();
     notifyListeners();
   }
 
   Future<void> add(String title, String body) async {
-    _posts = await DIContainer()
-        .get<AddPostUseCase>("AddPostUseCase")
-        .addPost(PostEntity(
-          id: DateTime.now().millisecondsSinceEpoch,
-          title: title,
-          body: body,
-        ));
+    _posts = await DIContainer().get<AddPostUseCase>().addPost(
+          PostEntity(
+              id: DateTime.now().millisecondsSinceEpoch,
+              title: title,
+              body: body),
+        );
     notifyListeners();
   }
 
   Future<void> delete(int id) async {
-    _posts = await DIContainer()
-        .get<DeletePostUseCase>("DeletePostUseCase")
-        .deletePost(id);
+    _posts = await DIContainer().get<DeletePostUseCase>().deletePost(id);
     notifyListeners();
   }
 }
